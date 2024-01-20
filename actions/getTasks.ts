@@ -1,10 +1,11 @@
 "use server";
-import { query } from "@/lib/graphql-client";
+import client from "@/lib/graphql-client";
 import {
   JiraPriorityField,
   JiraSingleLineTextField,
   TaskListQueryData,
 } from "./type";
+import TasksQuery from "@/graphql/TasksQuery";
 
 function buildTaskListFromResponse(data: TaskListQueryData) {
   return data.jira.issueSearchStable.edges.map((issueNode) => {
@@ -28,8 +29,11 @@ function buildTaskListFromResponse(data: TaskListQueryData) {
 }
 
 export default async function getTasks() {
-  const { data } = await query<TaskListQueryData>("TasksQuery", {
-    cloudId: process.env.JIRA_CLOUD_ID,
+  const { data } = await client.query({
+    query: TasksQuery,
+    variables: {
+      cloudId: process.env.JIRA_CLOUD_ID,
+    },
   });
   return buildTaskListFromResponse(data);
 }

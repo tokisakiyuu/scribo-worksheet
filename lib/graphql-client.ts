@@ -11,17 +11,4 @@ const client = new ApolloClient({
   },
 });
 
-export async function query<T = any>(
-  name: string,
-  variables?: QueryOptions["variables"],
-) {
-  const source = await fs.readFile(process.cwd() + `/graphql/${name}.gql`);
-  return await client.query<T>({
-    query: gql`
-      ${source.toString()}
-    `,
-    variables,
-  });
-}
-
 export default client;
