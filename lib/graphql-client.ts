@@ -1,8 +1,7 @@
-import { ApolloClient, InMemoryCache, QueryOptions, gql } from "@apollo/client";
-import fs from "fs/promises";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const cache = new InMemoryCache();
-const client = new ApolloClient({
+const GQLClient = new ApolloClient({
   cache: cache,
   uri: process.env.ATLASSIAN_GRAPHQL_URI,
   headers: {
@@ -11,4 +10,4 @@ const client = new ApolloClient({
   },
 });
 
-export default client;
+export default GQLClient;

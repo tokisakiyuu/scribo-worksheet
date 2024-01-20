@@ -1,39 +1,13 @@
 "use server";
-import client from "@/lib/graphql-client";
-import {
-  JiraPriorityField,
-  JiraSingleLineTextField,
-  TaskListQueryData,
-} from "./type";
-import TasksQuery from "@/graphql/TasksQuery";
-
-function buildTaskListFromResponse(data: TaskListQueryData) {
-  return data.jira.issueSearchStable.edges.map((issueNode) => {
-    const { key, webUrl, fieldsById } = issueNode.node;
-    const titleField = fieldsById.edges.find(
-      (fieldNode) => fieldNode.node.fieldId === "summary",
-    );
-    const priorityField = fieldsById.edges.find(
-      (fieldNode) => fieldNode.node.fieldId === "priority",
-    );
-    if (!titleField || !priorityField) {
-      throw new Error("Field missing");
-    }
-    return {
-      key,
-      webUrl,
-      title: (titleField.node as JiraSingleLineTextField).text,
-      priority: (priorityField.node as JiraPriorityField).priority,
-    };
-  });
-}
+import db from "@/lib/redis-client";
+import pullJira from "./pull-jira";
+import { Task } from "@/lib/types";
 
 export default async function getTasks() {
-  const { data } = await client.query({
-    query: TasksQuery,
-    variables: {
-      cloudId: process.env.JIRA_CLOUD_ID,
-    },
-  });
-  return buildTaskListFromResponse(data);
+  const tasks = await db.get<Task[]>("tasks");
+  if (!tasks || !tasks.length) {
+    return await pullJira();
+  } else {
+    return tasks;
+  }
 }

@@ -1,18 +1,19 @@
 "use client";
 import { useState } from "react";
-import { useAsync } from "react-use";
+import useSWR from "swr";
 import CommandExecutor from "./components/CommandExecutor";
-import CopyToClipboard from "./components/CopyToClipboard";
 import IconBranch from "./components/icons/Branch";
 import IconDown from "./components/icons/Down";
 import IconLoading from "./components/icons/Loading";
 import IconUp from "./components/icons/Up";
 import commandHandler from "@/lib/commandHandler";
 import getTasks from "@/actions/getTasks";
+import copy from "copy-to-clipboard";
 
 const Home = () => {
-  const { value: taskList = [], loading } = useAsync(() => getTasks());
+  const { data: taskList = [], isLoading } = useSWR("tasks", () => getTasks());
   const [openedKey, setOpenedKey] = useState<string>();
+  console.log(taskList);
 
   return (
     <main>
@@ -31,9 +32,13 @@ const Home = () => {
                 </a>
                 <span className="inline-block w-2" />
                 <span className="inline-flex gap-1">
-                  <CopyToClipboard text={task.key}>
+                  <a
+                    onClick={() =>
+                      copy(makeBranchName(task.key, task.title, 0))
+                    }
+                  >
                     <IconBranch />
-                  </CopyToClipboard>
+                  </a>
                   <a
                     onClick={() =>
                       openedKey === task.key
@@ -48,12 +53,12 @@ const Home = () => {
             </div>
           ))}
         </div>
-        {loading && (
+        {isLoading && (
           <div>
             <IconLoading />
           </div>
         )}
-        {!taskList.length && !loading && (
+        {!taskList.length && !isLoading && (
           <div className="flex items-center h-[40px]">
             <span className="text-gray-500">No thing</span>
           </div>
@@ -63,5 +68,16 @@ const Home = () => {
     </main>
   );
 };
+
+function makeBranchName(key: string, title: string, stage: number) {
+  let result = `${key.toUpperCase()}-${title
+    .replace(/\s+/g, "-")
+    .replace(/[^a-zA-Z\-]/g, "")
+    .toLowerCase()}`;
+  if (stage > 0) {
+    result += "-" + stage;
+  }
+  return result;
+}
 
 export default Home;

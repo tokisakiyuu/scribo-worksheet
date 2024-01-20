@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.10",
+    "@vercel/kv": "^1.0.1",
     "copy-to-clipboard": "^3.3.3",
     "graphql": "^16.8.1",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-use": "^17.4.3"
+    "react-use": "^17.4.3",
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@types/node": "^20",
