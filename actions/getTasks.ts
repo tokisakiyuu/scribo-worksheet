@@ -1,13 +1,20 @@
 "use server";
-import db from "@/lib/redis-client";
+import db, { KEY_PREFIX, client } from "@/lib/redis-client";
 import pullJira from "./pull-jira";
-import { Task } from "@/lib/types";
+import { Task, TaskTimeline } from "@/lib/types";
 
 export default async function getTasks() {
   const tasks = await db.get<Task[]>("tasks");
   if (!tasks || !tasks.length) {
-    return await pullJira();
-  } else {
-    return tasks;
+    return [];
   }
+
+  const timelines = await client.mget<TaskTimeline[]>(
+    ...tasks.map((task) => `${KEY_PREFIX}timeline:${task.key}`),
+  );
+
+  return tasks.map((task, i) => ({
+    ...task,
+    timeline: timelines.at(i) ?? [],
+  }));
 }

@@ -12,6 +12,7 @@
     "@apollo/client": "^3.8.10",
     "@vercel/kv": "^1.0.1",
     "copy-to-clipboard": "^3.3.3",
+    "dayjs": "^1.11.10",
     "graphql": "^16.8.1",
     "next": "14.0.4",
     "react": "^18",

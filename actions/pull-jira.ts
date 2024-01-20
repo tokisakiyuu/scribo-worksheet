@@ -6,7 +6,7 @@ import {
   JiraPriorityField,
   JiraSingleLineTextField,
   TaskListQueryData,
-} from "./types";
+} from "@/lib/types";
 
 export default async function pullJira() {
   const tasks = await getTasks();

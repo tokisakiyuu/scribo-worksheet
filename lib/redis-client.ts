@@ -1,6 +1,6 @@
 import { createClient } from "@vercel/kv";
 
-const KEY_PREFIX = "SCRIBO_WORKSHEET:";
+export const KEY_PREFIX = "SCRIBO_WORKSHEET:";
 
 export const client = createClient({
   url: process.env.KV_REST_API_URL as string,
