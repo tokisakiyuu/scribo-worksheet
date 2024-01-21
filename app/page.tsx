@@ -36,3 +36,5 @@ const Home = () => {
 };
 
 export default Home;
+
+export const dynamic = "force-dynamic";
