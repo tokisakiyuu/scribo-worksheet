@@ -1,10 +1,11 @@
-import pullJira from "@/actions/pull-jira";
+import sendToSlack from "@/actions/sendToSlack";
+import sync from "@/actions/sync";
 import { clearTimeline } from "@/actions/timeline";
 import { mutate } from "swr";
 
 export default async function commandHandler(input: string) {
-  if (input === "pull jira") {
-    await pullJira();
+  if (input === "sync") {
+    await sync();
     mutate("tasks");
     return;
   }
@@ -13,5 +14,9 @@ export default async function commandHandler(input: string) {
     await clearTimeline(input.split(/\s+/).at(2) as string);
     mutate("tasks");
     return;
+  }
+
+  if (input === "slack") {
+    await sendToSlack();
   }
 }

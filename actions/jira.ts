@@ -8,8 +8,8 @@ import {
   TaskListQueryData,
 } from "@/lib/types";
 
-export default async function pullJira() {
-  const tasks = await getTasks();
+export default async function pullJiraTask() {
+  const tasks = await fetchJiraTask();
   await db.set("tasks", tasks);
   return tasks;
 }
@@ -35,7 +35,7 @@ function buildTaskListFromResponse(data: TaskListQueryData) {
   });
 }
 
-async function getTasks() {
+export async function fetchJiraTask() {
   const { data } = await GQLClient.query({
     query: TasksQuery,
     variables: {
