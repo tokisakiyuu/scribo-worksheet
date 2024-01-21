@@ -19,6 +19,7 @@ export default async function commandHandler(input: string) {
   if (input === "slack") {
     const summary = await sendToSlack();
     console.log(summary);
+    mutate("tasks");
     return;
   }
 }
