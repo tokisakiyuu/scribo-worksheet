@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.10",
+    "@types/big.js": "^6.2.2",
     "@vercel/kv": "^1.0.1",
+    "big.js": "^6.2.1",
     "clsx": "^2.1.0",
     "copy-to-clipboard": "^3.3.3",
     "dayjs": "^1.11.10",

@@ -11,7 +11,7 @@ export default async function openTask(key: string) {
   const node: TaskOpenedEvent = {
     isEvent: true,
     type: "opened",
-    utcDate: new Date().toUTCString(),
+    utcDate: new Date().toISOString(),
   };
 
   await pushToTimeline(key, node);

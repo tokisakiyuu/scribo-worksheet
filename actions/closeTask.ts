@@ -11,6 +11,6 @@ export default async function closeTask(key: string) {
   await pushToTimeline(key, {
     isEvent: true,
     type: "closed",
-    utcDate: new Date().toUTCString(),
+    utcDate: new Date().toISOString(),
   });
 }

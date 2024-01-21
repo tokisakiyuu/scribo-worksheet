@@ -6,7 +6,7 @@ export default async function completeSubtask(key: string, subtaskID: string) {
   const node: SubtaskCompletedEvent = {
     type: "subtaskCompleted",
     isEvent: true,
-    utcDate: new Date().toUTCString(),
+    utcDate: new Date().toISOString(),
     id: subtaskID,
   };
   await pushToTimeline(key, node);

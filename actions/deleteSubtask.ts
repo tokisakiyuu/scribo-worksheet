@@ -6,7 +6,7 @@ export default async function deleteSubtask(key: string, subtaskID: string) {
   const node: SubtaskDeletedEvent = {
     type: "subtaskDeleted",
     isEvent: true,
-    utcDate: new Date().toUTCString(),
+    utcDate: new Date().toISOString(),
     id: subtaskID,
   };
   await pushToTimeline(key, node);
