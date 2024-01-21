@@ -1,3 +1,5 @@
+import TaskView from "@/app/TaskView";
+
 export interface Task {
   key: string;
   title: string;
@@ -78,11 +80,17 @@ export interface SubtaskCompletedEvent extends TaskEvent {
   id: string;
 }
 
+export interface SubtaskDeletedEvent extends TaskEvent {
+  type: "subtaskDeleted";
+  id: string;
+}
+
 export type TaskTimelineNode =
   | TaskOpenedEvent
   | TaskClosedEvent
   | TaskNewBranchEvent
   | SubtaskCreatedEvent
-  | SubtaskCompletedEvent;
+  | SubtaskCompletedEvent
+  | SubtaskDeletedEvent;
 
 export type TaskTimeline = TaskTimelineNode[];

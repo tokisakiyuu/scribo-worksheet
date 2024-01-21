@@ -1,6 +1,5 @@
 "use server";
 import db, { KEY_PREFIX, client } from "@/lib/redis-client";
-import pullJira from "./pull-jira";
 import { Task, TaskTimeline } from "@/lib/types";
 
 export default async function getTasks() {

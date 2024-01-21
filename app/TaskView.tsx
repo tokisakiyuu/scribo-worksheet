@@ -1,6 +1,7 @@
 import {
   SubtaskCompletedEvent,
   SubtaskCreatedEvent,
+  SubtaskDeletedEvent,
   TaskOpenedEvent,
   TaskTimeline,
   TaskTimelineNode,
@@ -15,6 +16,7 @@ import createSubtask from "@/actions/createSubtask";
 import { mutate } from "swr";
 import completeSubtask from "@/actions/completeSubtask";
 import cx from "clsx";
+import deleteSubtask from "@/actions/deleteSubtask";
 
 interface Props {
   task: {
@@ -47,6 +49,14 @@ const TaskView: FC<Props> = ({ task }) => {
       } else {
         await submitCompleteNode(key, node?.id as string);
       }
+    } else if (value.startsWith("/delete")) {
+      const [, index] = value.split(/\s+/);
+      const node = subtasks[Number(index)];
+      if (!node) {
+        await submitNode(key, value);
+      } else {
+        await submitDeleteSubtask(key, node?.id as string);
+      }
     } else {
       await submitNode(key, value);
     }
@@ -77,8 +87,7 @@ const TaskView: FC<Props> = ({ task }) => {
         </span>
       </h3>
 
-      {/* timeline */}
-      <div className="mt-2 pl-6 border-l-[4px] border-gray-700 border-solid">
+      <div>
         {isNotYetOpened ? (
           <Tag color="red">Note yet opened</Tag>
         ) : isOpened ? (
@@ -87,6 +96,10 @@ const TaskView: FC<Props> = ({ task }) => {
           <Tag color="red">Closed</Tag>
         )}
         {stage > 0 && <Tag color="blue">Stage {stage}</Tag>}
+      </div>
+
+      {/* timeline */}
+      <div className="mt-2 pl-6 border-l-[4px] border-gray-700 border-solid">
         {subtasks.map((node, i) => (
           <div key={task.key + "_" + i} className="[&+&]:mt-2 flex">
             <span className="mr-2 text-[.6em] flex items-end text-gray-500">
@@ -95,7 +108,7 @@ const TaskView: FC<Props> = ({ task }) => {
             <SubtaskNode data={node as any} />
           </div>
         ))}
-        <div className="mt-6">
+        <div className="mt-2">
           <input
             className="outline-none bg-transparent block w-full text-sm"
             placeholder="Enter event..."
@@ -137,10 +150,17 @@ async function submitCompleteNode(key: string, subtaskID: string) {
   return completeSubtask(key, subtaskID);
 }
 
+async function submitDeleteSubtask(key: string, subtaskID: string) {
+  return deleteSubtask(key, subtaskID);
+}
+
 function organizeTimeline(timeline: TaskTimeline) {
   const completedSubtasks = timeline
     .filter((node) => node.type === "subtaskCompleted")
     .map((node) => (node as SubtaskCompletedEvent).id);
+  const deletedSubtasks = timeline
+    .filter((node) => node.type === "subtaskDeleted")
+    .map((node) => (node as SubtaskDeletedEvent).id);
   let newBranchCount = 0;
   let isOpened = false;
   let isNotYetOpened = !timeline.length;
@@ -169,7 +189,8 @@ function organizeTimeline(timeline: TaskTimeline) {
         content,
         isCompleted: completedSubtasks.includes(id),
       };
-    });
+    })
+    .filter((subtask) => !deletedSubtasks.includes(subtask.id));
 
   return {
     stage: newBranchCount,
