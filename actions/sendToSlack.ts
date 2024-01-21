@@ -4,6 +4,7 @@ import { Task, TaskTimeline } from "@/lib/types";
 import { organizeTimeline } from "@/lib/utils";
 import dayjs from "dayjs";
 import Big from "big.js";
+import sync from "./sync";
 
 export default async function sendToSlack() {
   const tasks = await getTaskSummary();
@@ -135,6 +136,8 @@ export default async function sendToSlack() {
     },
     body: JSON.stringify(slackMessageBody),
   });
+
+  await sync();
 
   return tasks;
 }
