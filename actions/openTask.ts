@@ -1,17 +1,20 @@
 "use server";
-import db from "@/lib/redis-client";
-import { TaskTimeline } from "@/lib/types";
+import { isOpenedTask } from "@/lib/utils";
+import { getTimeline, pushToTimeline } from "./timeline";
+import { TaskOpenedEvent } from "@/lib/types";
 
 export default async function openTask(key: string) {
-  const timeline = await db.get<TaskTimeline>(`timeline:${key}`);
+  const timeline = await getTimeline(key);
 
-  if (timeline && timeline.length) throw new Error("Request denied");
+  if (isOpenedTask(timeline)) return;
 
-  await db.set<TaskTimeline>(`timeline:${key}`, [
-    {
-      isEvent: true,
-      type: "opened",
-      utcDate: new Date().toUTCString(),
-    },
-  ]);
+  const node: TaskOpenedEvent = {
+    isEvent: true,
+    type: "opened",
+    utcDate: new Date().toUTCString(),
+  };
+
+  await pushToTimeline(key, node);
+
+  return node;
 }
