@@ -1,0 +1,14 @@
+name: "Send slack message every day"
+
+on:
+  schedule:
+    - cron: "0 17 * * 1,2,3,4,5"
+
+jobs:
+  send_message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: curl-command
+        run: curl -I https://www.google.com
+      - name: echo-command
+        run: echo "Hello World"
