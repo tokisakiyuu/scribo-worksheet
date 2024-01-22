@@ -137,8 +137,6 @@ export default async function sendToSlack() {
     body: JSON.stringify(slackMessageBody),
   });
 
-  await sync();
-
   return tasks;
 }
 
