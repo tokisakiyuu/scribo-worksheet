@@ -1,6 +1,7 @@
 name: "Send slack message every day"
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "0 17 * * 1,2,3,4,5"
 
