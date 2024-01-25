@@ -4,7 +4,6 @@ import { Task, TaskTimeline } from "@/lib/types";
 import { organizeTimeline } from "@/lib/utils";
 import dayjs from "dayjs";
 import Big from "big.js";
-import sync from "./sync";
 
 export default async function sendToSlack() {
   const tasks = await getTaskSummary();
@@ -87,43 +86,47 @@ export default async function sendToSlack() {
               },
             ],
           },
-          ...tasks.flatMap((task) => [
-            {
-              type: "rich_text_list",
-              style: "bullet",
-              indent: 0,
-              border: 0,
-              elements: [
-                {
-                  type: "rich_text_section",
-                  elements: [
-                    {
-                      type: "link",
-                      url: task.webUrl,
-                      text: task.title,
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              type: "rich_text_list",
-              style: "bullet",
-              indent: 1,
-              border: 0,
-              elements: [
-                ...task.todayDoing.map((subtask) => ({
-                  type: "rich_text_section",
-                  elements: [
-                    {
-                      type: "text",
-                      text: subtask.content,
-                    },
-                  ],
-                })),
-              ],
-            },
-          ]),
+          ...tasks.flatMap((task) =>
+            task.todayDoing.length
+              ? [
+                  {
+                    type: "rich_text_list",
+                    style: "bullet",
+                    indent: 0,
+                    border: 0,
+                    elements: [
+                      {
+                        type: "rich_text_section",
+                        elements: [
+                          {
+                            type: "link",
+                            url: task.webUrl,
+                            text: task.title,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    type: "rich_text_list",
+                    style: "bullet",
+                    indent: 1,
+                    border: 0,
+                    elements: [
+                      ...task.todayDoing.map((subtask) => ({
+                        type: "rich_text_section",
+                        elements: [
+                          {
+                            type: "text",
+                            text: subtask.content,
+                          },
+                        ],
+                      })),
+                    ],
+                  },
+                ]
+              : [],
+          ),
         ],
       },
     ],
