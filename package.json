@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.10",
+    "@prisma/client": "^5.8.1",
     "@types/big.js": "^6.2.2",
     "@vercel/kv": "^1.0.1",
     "big.js": "^6.2.1",
@@ -19,6 +20,7 @@
     "graphql": "^16.8.1",
     "nanoid": "^5.0.4",
     "next": "14.0.4",
+    "prisma": "^5.8.1",
     "react": "^18",
     "react-dom": "^18",
     "react-use": "^17.4.3",
