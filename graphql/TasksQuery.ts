@@ -6,7 +6,7 @@ export default gql`
       issueSearchStable(
         cloudId: $cloudId
         issueSearchInput: {
-          jql: "project = DEV and status in (\\"To Do\\", \\"In Progress\\") ORDER BY priority DESC, createdDate ASC"
+          jql: "project = DEV and status in (\\"To Do\\", \\"In Progress\\", \\"In Review\\") ORDER BY priority DESC, createdDate ASC"
         }
       ) {
         edges {
