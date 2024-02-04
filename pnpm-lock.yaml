@@ -55,6 +55,12 @@ dependencies:
     version: 2.2.4(react@18.2.0)
 
 devDependencies:
+  '@taalpha/prettier-config':
+    specifier: ^1.0.0
+    version: 1.0.0
+  '@taalpha/tsconfig':
+    specifier: ^1.0.1
+    version: 1.0.1
   '@types/node':
     specifier: ^20
     version: 20.11.2
@@ -338,6 +344,15 @@ packages:
     dependencies:
       tslib: 2.6.2
     dev: false
+
+  /@taalpha/prettier-config@1.0.0:
+    resolution: {integrity: sha512-3cPnYuI4rJB1AyLesorPsyuDKtJi8svxZ4njG7x3U9UKZXx1S2zxUJ00YkmT31SCcsd21IS+Lje5d1tdcKOCUw==}
+    dev: true
+
+  /@taalpha/tsconfig@1.0.1:
+    resolution: {integrity: sha512-qB6V2x8OwMlpVbqj8aHMl4w04A3pWKjW4Ts4qdeYftMCfDVOBJQp47QXeyExVLSVS9kJ9LzXsJqTzpERhm31bg==}
+    engines: {node: '>=18'}
+    dev: true
 
   /@types/big.js@6.2.2:
     resolution: {integrity: sha512-e2cOW9YlVzFY2iScnGBBkplKsrn2CsObHQ2Hiw4V1sSyiGbgWL8IyqE3zFi1Pt5o1pdAtYkDAIsF3KKUPjdzaA==}
