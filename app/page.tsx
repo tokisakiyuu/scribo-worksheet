@@ -1,19 +1,19 @@
-"use client";
-import getTasks from "@/actions/getTasks";
-import commandHandler from "@/lib/commandHandler";
-import useSWR from "swr";
-import TaskView from "./TaskView";
-import CommandExecutor from "./components/CommandExecutor";
-import IconLoading from "./components/icons/Loading";
+'use client'
+import getTasks from '@/actions/getTasks'
+import commandHandler from '@/lib/commandHandler'
+import useSWR from 'swr'
+import TaskView from './TaskView'
+import CommandExecutor from './components/CommandExecutor'
+import IconLoading from './components/icons/Loading'
 
 const Home = () => {
-  const { data: tasks = [], isLoading } = useSWR("tasks", () => getTasks());
+  const { data: tasks = [], isLoading } = useSWR('tasks', () => getTasks())
 
   return (
     <main>
       <div className="max-w-[760px] min-h-[100vh] m-[0_auto]">
         <div id="tasks">
-          {tasks.map((task) => (
+          {tasks.map(task => (
             <TaskView key={task.key} task={task} />
           ))}
         </div>
@@ -32,9 +32,9 @@ const Home = () => {
       </div>
       <CommandExecutor handler={commandHandler} />
     </main>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic'
