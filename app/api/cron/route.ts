@@ -5,3 +5,5 @@ export async function GET() {
     date: new Date().toLocaleString('zh-cn', { timeZone: 'Asia/Chongqing' }),
   })
 }
+
+export const dynamic = 'force-dynamic'
