@@ -20,16 +20,37 @@ const Query = {
       id: issue.id,
       title: issue.fields.summary,
       webURL: `https://${process.env.JIRA_ORGANISATION}.atlassian.net/browse/${issue.key}`,
+      gitBranchName:
+        issue.key +
+        '-' +
+        issue.fields.summary
+          .toLowerCase()
+          .replace(/[^a-z\s]/g, '')
+          .split(/\s+/)
+          .slice(0, 4)
+          .join('-'),
     }))
   },
 
-  taskGitBranchName: async (_parent: any, { id }: any, { user }: any) => {
-    const { key, fields } = await createClient(
-      user.config.atlassian_app_token,
-    ).getIssue(id)
-    const { summary } = fields
-    // TODO ChatGPT
-    return `${key}-${summary}`
+  task: async (_parent: any, { id }: any, { user }: any) => {
+    const issue = await createClient(user.config.atlassian_app_token).getIssue(
+      id,
+    )
+    return {
+      key: issue.key,
+      id: issue.id,
+      title: issue.fields.summary,
+      webURL: `https://${process.env.JIRA_ORGANISATION}.atlassian.net/browse/${issue.key}`,
+      gitBranchName:
+        issue.key +
+        '-' +
+        issue.fields.summary
+          .toLowerCase()
+          .replace(/[^a-z\s]/g, '')
+          .split(/\s+/)
+          .slice(0, 4)
+          .join('-'),
+    }
   },
 }
 

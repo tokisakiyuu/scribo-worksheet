@@ -4,7 +4,7 @@ const queryDefs = gql`
   type Query {
     self: User!
     tasks: [Task!]
-    taskGitBranchName(id: String!): String!
+    task(id: String!): Task!
   }
 `
 
@@ -49,6 +49,7 @@ const typeDefs = gql`
     id: String!
     title: String!
     webURL: String!
+    gitBranchName: String!
   }
 `
 
