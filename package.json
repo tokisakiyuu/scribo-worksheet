@@ -17,6 +17,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/md5": "^2.3.5",
     "@vercel/kv": "^1.0.1",
+    "axios": "^1.6.8",
     "big.js": "^6.2.1",
     "clsx": "^2.1.0",
     "copy-to-clipboard": "^3.3.3",

@@ -46,3 +46,5 @@ const handler = startServerAndCreateNextHandler(server, {
 })
 
 export { handler as GET, handler as POST }
+
+export const dynamic = 'force-dynamic'

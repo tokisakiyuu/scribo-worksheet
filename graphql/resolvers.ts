@@ -1,10 +1,26 @@
 import db from '@/lib/db'
+import { createClient } from '@/lib/jira-rest-api'
 
 const Query = {
-  hello: () => 'world',
-  self: async (parent: any, args: any, context: any) => {
+  self: async (_parent: any, _args: any, context: any) => {
+    return context.user
+  },
+
+  tasks: async (_parent: any, _args: any, context: any) => {
     const { user } = context
-    return await db.user.findFirst({ where: { id: user.id } })
+    const { config } = user
+    const { atlassian_app_token } = config
+    const client = createClient(atlassian_app_token)
+    const res = await client.search(
+      'project = DEV and assignee = currentUser() and status in ("In Progress", "To Do")ORDER BY Rank ASC',
+    )
+    const { issues } = res
+    return (issues as any[]).map(issue => ({
+      key: issue.key,
+      id: issue.id,
+      title: issue.fields.summary,
+      webURL: `https://${process.env.JIRA_ORGANISATION}.atlassian.net/browse/${issue.key}`,
+    }))
   },
 }
 
@@ -13,6 +29,13 @@ const Mutation = {
     const { input } = args
     const { user } = context
     await db.user.update({ where: { id: user.id }, data: { config: input } })
+    return 'ok'
+  },
+
+  startTask: async (_parent: any, { taskID }: any, { user }: any) => {
+    const client = createClient(user.config.atlassian_app_token)
+    await client.transitions(taskID, { transition: { id: '21' } })
+    // console.log(await client.getTransitions(taskID))
     return 'ok'
   },
 }

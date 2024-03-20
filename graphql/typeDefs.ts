@@ -2,8 +2,8 @@ import { gql } from 'graphql-tag'
 
 const queryDefs = gql`
   type Query {
-    hello: String!
     self: User!
+    tasks: [Task!]
   }
 `
 
@@ -13,6 +13,11 @@ const mutationDefs = gql`
     配置账户，使用其它功能前必须先配置
     """
     configureAccount(input: AccountConfigInput!): String!
+
+    """
+    开始某个任务。会将对应任务状态改为“In Progress”
+    """
+    startTask(taskID: String!): String!
   }
 `
 
@@ -33,6 +38,16 @@ const typeDefs = gql`
     username: String!
     config: AccountConfig
     token: String!
+  }
+
+  """
+  Jira任务
+  """
+  type Task {
+    key: String!
+    id: String!
+    title: String!
+    webURL: String!
   }
 `
 
