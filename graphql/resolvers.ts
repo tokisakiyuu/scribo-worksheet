@@ -22,6 +22,15 @@ const Query = {
       webURL: `https://${process.env.JIRA_ORGANISATION}.atlassian.net/browse/${issue.key}`,
     }))
   },
+
+  taskGitBranchName: async (_parent: any, { id }: any, { user }: any) => {
+    const { key, fields } = await createClient(
+      user.config.atlassian_app_token,
+    ).getIssue(id)
+    const { summary } = fields
+    // TODO ChatGPT
+    return `${key}-${summary}`
+  },
 }
 
 const Mutation = {
@@ -32,9 +41,9 @@ const Mutation = {
     return 'ok'
   },
 
-  startTask: async (_parent: any, { taskID }: any, { user }: any) => {
+  startTask: async (_parent: any, { id }: any, { user }: any) => {
     const client = createClient(user.config.atlassian_app_token)
-    await client.transitions(taskID, { transition: { id: '21' } })
+    await client.transitions(id, { transition: { id: '21' } })
     // console.log(await client.getTransitions(taskID))
     return 'ok'
   },

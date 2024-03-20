@@ -31,6 +31,11 @@ async function editmata(req: AxiosInstance, issueId: string) {
   return data
 }
 
+async function getIssue(req: AxiosInstance, issueId: string) {
+  const { data } = await req.get(`/issue/${issueId}`)
+  return data
+}
+
 async function transitions(req: AxiosInstance, issueId: string, input: any) {
   try {
     await req.post(`/issue/${issueId}/transitions`, input)
@@ -57,5 +62,6 @@ export function createClient(token: string, apiVersion: number = 2) {
     editIssue: (issueId: string, input: any) => editIssue(req, issueId, input),
     editmeta: (issueId: string) => editmata(req, issueId),
     getTransitions: (issueId: string) => getTransitions(req, issueId),
+    getIssue: (issueId: string) => getIssue(req, issueId),
   }
 }

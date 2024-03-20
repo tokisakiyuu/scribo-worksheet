@@ -4,6 +4,7 @@ const queryDefs = gql`
   type Query {
     self: User!
     tasks: [Task!]
+    taskGitBranchName(id: String!): String!
   }
 `
 
@@ -17,7 +18,7 @@ const mutationDefs = gql`
     """
     开始某个任务。会将对应任务状态改为“In Progress”
     """
-    startTask(taskID: String!): String!
+    startTask(id: String!): String!
   }
 `
 
