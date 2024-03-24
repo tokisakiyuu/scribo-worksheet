@@ -34,4 +34,18 @@ export default class Github {
     const { data } = await this.ax.get(`/repos/${ORG}/${repo}/pulls/${number}`)
     return data
   }
+
+  /**
+   * @see https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
+   */
+  async createPullRequest(repo: string, input: any) {
+    const { status, data } = await this.ax.post(
+      `/repos/${ORG}/${repo}/pulls`,
+      input,
+    )
+    if (status !== 201) {
+      throw new Error('Create Pull Request failed')
+    }
+    return data
+  }
 }

@@ -30,6 +30,7 @@ const Mutation = {
   },
 
   jira: () => ({}),
+  github: () => ({}),
 }
 
 export default Mutation

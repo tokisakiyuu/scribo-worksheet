@@ -25,6 +25,8 @@ type Mutation {
   endTask(id: String!): String!
 
   jira: JiraMutation
+
+  github: GithubMutation
 }
 
 """
@@ -73,11 +75,28 @@ type GithubQuery {
   ): [GithubPullRequest!]
 }
 
+type GithubMutation {
+  """
+  创建PR
+  """
+  createPullRequest(
+    repo: String!
+    input: CreatePullRequestInput
+  ): GithubPullRequest!
+}
+
 type GithubPullRequest {
   title: String!
   number: Int!
   state: String!
   createdAt: String!
+  head: String!
+  base: String!
+}
+
+input CreatePullRequestInput {
+  title: String!
+  body: String
   head: String!
   base: String!
 }
