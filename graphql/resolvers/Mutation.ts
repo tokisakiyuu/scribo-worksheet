@@ -17,15 +17,21 @@ const Mutation = {
     return 'ok'
   },
 
-  startTask: async (_parent: any, { id }: any, { user }: any) => {
+  startTask: async (_parent: any, args: any, { user }: any) => {
+    const { issueId, repo, base, head } = args
+    // TODO: 根据repo base head三个参数创建指定新分支
+    // TODO: 根据issueId移动Jira卡片到"In Progress"状态
     const jira = new Jira(user.config.atlassian_app_token)
-    await jira.transitionIssue(id, { transition: { id: '21' } })
+    await jira.transitionIssue(issueId, { transition: { id: '21' } })
     // console.log(await client.getTransitions(taskID))
     return 'ok'
   },
 
   endTask: async (_parent: any, args: any, ctx: any) => {
-    // TODO: 创建PR，将issue移动到DEV-REVIEW
+    const { issueId, repo, base, head } = args
+    // TODO: 根据issueId查询到Jira卡片详情
+    // TODO: 根据repo base head三个参数再加上Jira卡片信息创建一个PR
+    // TODO: 移动Jira卡片到"Dev Review"状态
     return 'ok'
   },
 

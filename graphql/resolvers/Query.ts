@@ -1,4 +1,6 @@
+import Github from '@/lib/github-rest-api'
 import Jira from '@/lib/jira-rest-api'
+import { getIssueWorkBranchNames } from '@/lib/workBranch'
 
 function createJiraClient(ctx: any) {
   return new Jira(ctx.user.config.atlassian_app_token)
@@ -47,6 +49,16 @@ const Query = {
       webURL: `https://${process.env.JIRA_ORGANISATION}.atlassian.net/browse/${issue.key}`,
       gitBranchName: makeGitBranchName(issue),
     }
+  },
+
+  workBranchNames: async (_parent: any, args: any, ctx: any) => {
+    const github = new Github(ctx.user.config.github_access_token)
+    const branchNames = await getIssueWorkBranchNames(
+      github,
+      args.taskId,
+      args.repo,
+    )
+    return branchNames
   },
 
   github: () => ({}),

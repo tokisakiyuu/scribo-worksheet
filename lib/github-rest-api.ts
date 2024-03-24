@@ -25,7 +25,7 @@ export default class Github {
 
   async searchPullRequest(repoName: string, keywordInTitle: string) {
     const { data } = await this.ax.get(
-      `/search/issues?q=${encodeURIComponent(`is:pr repo:${ORG}/${repoName} "${keywordInTitle}" in:title`)}`,
+      `/search/issues?q=${encodeURIComponent(`is:pr repo:${ORG}/${repoName} "${keywordInTitle}" in:title`)}&per_page=100`,
     )
     return data
   }

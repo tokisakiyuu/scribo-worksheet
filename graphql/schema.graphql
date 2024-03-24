@@ -4,6 +4,7 @@ type Query {
   self: User!
   tasks: [Task!]
   task(id: String!): Task!
+  workBranchNames(taskId: String!, repo: String!): [String!]
   github: GithubQuery
   jira: JiraQuery
 }
@@ -57,7 +58,6 @@ type Task {
   id: String!
   title: String!
   webURL: String!
-  gitBranchName: String!
 }
 
 type GithubQuery {
