@@ -1,0 +1,99 @@
+scalar JSON
+
+type Query {
+  self: User!
+  tasks: [Task!]
+  task(id: String!): Task!
+  github: GithubQuery
+  jira: JiraQuery
+}
+
+type Mutation {
+  """
+  配置账户，使用其它功能前必须先配置
+  """
+  configureAccount(input: AccountConfigInput!): String!
+
+  """
+  开始某个任务。会将对应任务状态改为“In Progress”
+  """
+  startTask(id: String!): String!
+
+  """
+  结束任务。会将对应任务状态改为“DEV Review”，并在指定仓库中寻找任务分支打开PR。如果没找到任务分支，会返回错误。
+  """
+  endTask(id: String!): String!
+
+  jira: JiraMutation
+}
+
+"""
+必要的配置项
+"""
+input AccountConfigInput {
+  atlassian_app_token: String
+  github_access_token: String
+}
+
+type AccountConfig {
+  atlassian_app_token: String
+  github_access_token: String
+}
+
+type User {
+  id: String!
+  username: String!
+  config: AccountConfig
+  token: String!
+}
+
+"""
+Jira任务
+"""
+type Task {
+  key: String!
+  id: String!
+  title: String!
+  webURL: String!
+  gitBranchName: String!
+}
+
+type GithubQuery {
+  """
+  列出指定团队下的所有仓库名
+  """
+  listTeamRepos(team: String!): [String!]
+
+  """
+  按标题中的关键字搜索指定仓库的PR
+  """
+  searchPullRequest(
+    repoName: String!
+    keywordInTitle: String!
+  ): [GithubPullRequest!]
+}
+
+type GithubPullRequest {
+  title: String!
+  number: Int!
+  state: String!
+  createdAt: String!
+  head: String!
+  base: String!
+}
+
+type JiraQuery {
+  search(jql: String!): [Task!]
+  getIssue(issueId: String!): Task!
+  getTransitions(issueId: String!): [IssueTransition!]
+}
+
+type JiraMutation {
+  transitions(issueId: String!, input: JSON!): String!
+}
+
+type IssueTransition {
+  id: String!
+  name: String!
+  to: String!
+}

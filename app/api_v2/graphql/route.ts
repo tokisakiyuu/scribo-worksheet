@@ -1,7 +1,7 @@
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { ApolloServer } from '@apollo/server'
-import { GraphQLError } from 'graphql'
-import typeDefs from '@/graphql/typeDefs'
+import { GraphQLError, parse } from 'graphql'
+import typeDefs from '@/graphql/schema.graphql'
 import resolvers from '@/graphql/resolvers'
 import { User } from '@prisma/client'
 import db from '@/lib/db'
@@ -13,7 +13,7 @@ interface AppContext {
 
 const server = new ApolloServer<AppContext>({
   resolvers,
-  typeDefs,
+  typeDefs: parse(typeDefs),
 })
 
 function throwAuthError(msg: string): never {

@@ -11,44 +11,13 @@ datasource db {
 }
 
 model User {
-  id       String     @id @default(auto()) @map("_id") @db.ObjectId
-  username String     @unique
+  id       String      @id @default(auto()) @map("_id") @db.ObjectId
+  username String      @unique
   config   UserConfig?
   token    String
 }
 
 type UserConfig {
   atlassian_app_token String
+  github_access_token String
 }
-
-// model Task {
-//   id       String    @id @default(auto()) @map("_id") @db.ObjectId
-//   key      String    @unique
-//   title    String
-//   isOpened Boolean
-//   stage    Int       @default(0)
-//   subtasks Subtask[]
-// 
-//   @@map("scribo_worksheet_task")
-// }
-// 
-// model Subtask {
-//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-//   title     String
-//   isOpened  Boolean  @default(true)
-//   createdAt DateTime @default(now())
-//   task      Task     @relation(fields: [taskId], references: [id])
-//   taskId    String   @db.ObjectId
-//   report    Report?
-// 
-//   @@map("scribo_worksheet_subtask")
-// }
-// 
-// model Report {
-//   id         String  @id @default(auto()) @map("_id") @db.ObjectId
-//   subtaskId  String  @unique @db.ObjectId
-//   subtask    Subtask @relation(fields: [subtaskId], references: [id])
-//   isReported Boolean @default(false)
-// 
-//   @@map("scribo_worksheet_report_queue")
-// }
